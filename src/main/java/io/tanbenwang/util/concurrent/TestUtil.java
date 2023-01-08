@@ -1,4 +1,4 @@
-package org.tanbenwang.util.concurrent;
+package io.tanbenwang.util.concurrent;
 
 public class TestUtil {
     public static void test(){

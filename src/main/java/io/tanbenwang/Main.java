@@ -1,6 +1,6 @@
-package org.tanbenwang;
+package io.tanbenwang;
 
-import org.tanbenwang.util.concurrent.TestUtil;
+import io.tanbenwang.util.concurrent.TestUtil;
 
 public class Main {
     public static void main(String[] args) {
