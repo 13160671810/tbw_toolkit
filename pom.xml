@@ -5,7 +5,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.github.tanbenwang</groupId>
-    <artifactId>io.github.tanbenwang.tbw_toolkit</artifactId>
+    <artifactId>tbw_toolkit</artifactId>
     <version>0.0.1</version>
 
 
@@ -16,120 +16,132 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
+    <!-- license -->
     <licenses>
         <license>
-            <name>The Apache Software License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-            <distribution>repo</distribution>
+            <name>MIT</name>
+            <url>https://github.com/lijiahangmax/orion-kit/blob/master/LICENSE</url>
         </license>
     </licenses>
 
+    <!-- scm -->
+    <scm>
+        <connection>scm:git:git@github.com:tanbenw/tbw_toolkit.git</connection>
+        <developerConnection>scm:git:git@github.com:tanbenw/tbw_toolkit.git</developerConnection>
+        <url>git@github.com:tanbenw/tbw_toolkit.git</url>
+    </scm>
+
+    <!-- issue -->
+    <issueManagement>
+        <system>Github Issue</system>
+        <url>https://github.com/tanbenw/tbw_toolkit/issues</url>
+    </issueManagement>
+
+    <!-- developers -->
     <developers>
         <developer>
             <name>tanbenwang</name>
             <email>846804636@qq.com</email>
             <timezone>+8</timezone>
+            <roles>
+                <role>Developer</role>
+            </roles>
         </developer>
     </developers>
 
-    <distributionManagement>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
-
-        <repository>
-            <id>ossrh</id>
-            <name>Nexus Release Repository</name>
-            <url>http://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
-        </repository>
-
-    </distributionManagement>
-
-
-
-    <scm>
-        <connection>scm:https://github.com/tanbenw/tbw_toolkit.git</connection>
-        <developerConnection>scm:https://github.com/tanbenw/tbw_toolkit.git</developerConnection>
-        <url>https://github.com/tanbenw/tbw_toolkit</url>
-    </scm>
-
-
     <build>
         <plugins>
+            <!-- 编译插件 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>jar</goal>
-                            <goal>test-jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <!-- Source -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-source-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>attach-sources</id>
-                        <goals>
-                            <goal>jar-no-fork</goal>
-                        </goals>
-                    </execution>
-                </executions>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${maven.compiler.source}</source>
+                    <target>${maven.compiler.target}</target>
+                </configuration>
             </plugin>
 
             <!-- Javadoc -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <additionalJOptions>
-                        <additionalJOption>-Xdoclint:none</additionalJOption>
-                    </additionalJOptions>
-                </configuration>
+                <version>3.1.1</version>
                 <executions>
                     <execution>
-                        <id>attach-javadocs</id>
+                        <phase>package</phase>
                         <goals>
                             <goal>jar</goal>
                         </goals>
                     </execution>
                 </executions>
             </plugin>
-
-            <!-- GPG -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-gpg-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <id>sign-artifacts</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>sign</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.3</version>
-                <extensions>true</extensions>
-                <configuration>
-                    <serverId>ossrh</serverId>
-                    <nexusUrl>https://oss.sonatype.org/</nexusUrl>
-                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
+
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <distributionManagement>
+                <snapshotRepository>
+                    <id>oss</id>
+                    <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
+                </snapshotRepository>
+                <repository>
+                    <id>oss</id>
+                    <url>https://s01.oss.sonatype.orgservice/local/staging/deploy/maven2/</url>
+                </repository>
+            </distributionManagement>
+            <build>
+                <plugins>
+                    <!-- Source -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>3.2.1</version>
+                        <executions>
+                            <execution>
+                                <id>oss</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- Gpg Signature -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.6</version>
+                        <executions>
+                            <execution>
+                                <id>oss</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.sonatype.plugins</groupId>
+                        <artifactId>nexus-staging-maven-plugin</artifactId>
+                        <version>1.6.8</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <serverId>oss</serverId>
+                            <nexusUrl>https://s01.oss.sonatype.org</nexusUrl>
+                            <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+
 
 
 </project>
